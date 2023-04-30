@@ -1,9 +1,18 @@
 const express = require("express");
-const dotenv = require("dotenv").config("./config.env");
+const dotenv = require("dotenv")
 const app = express();
-const connectDB = require("./config/db");
+const mongoose = require("mongoose");
 
-connectDB();
+dotenv.config();
+
+mongoose
+  .set("strictQuery", false)
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Db connected"))
+  .catch((err) => console.log(err));
 
 app.use(express.json()) 
 app.use('/api/auth', require("./routes/auth"));
